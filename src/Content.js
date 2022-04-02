@@ -15,22 +15,22 @@ export default function Content() {
 	// 1. Callback luon dc goi sau khi component mounted
 	// 2. Clean up function luon dc goi truoc khi component duoc unmounted
 
+	// 3. Cleanup function luon dc goi truoc khi callback dc goi(tru lan mounted)
+
 	// Note: Khi thay component co the bi unmounted bang bat ki truong hop nao, ma o trong component do co sd setInterval, setTimeout, async, listener event, subcribe event thi luon nho dung clean up function de tranh ro ri bo nho
 
-	const [countdown, setCountdown] = useState(180);
+	const [count, setCount] = useState(1);
 
 	useEffect(() => {
-		const timerId = setInterval(() => {
-			setCountdown((prev) => prev - 1);
-		}, 1000);
-		return () => {
-			clearInterval(timerId);
-		};
-	}, []);
+		console.log("Mounted or Re-render");
+
+		return () => console.log("Clean up");
+	}, [count]);
 
 	return (
 		<div>
-			<h1>{countdown}</h1>
+			<h1>{count}</h1>
+			<button onClick={() => setCount(count + 1)}>Click me</button>
 		</div>
 	);
 }
