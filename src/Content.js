@@ -15,10 +15,12 @@ export default function Content() {
 	//
 	// --------------------------------
 	// 1. Callback luon dc goi sau khi component mounted
+	// 2. Clean up function luon dc goi truoc khi component duoc unmounted
 
 	const [title, setTitle] = useState("");
 	const [posts, setPosts] = useState([]);
 	const [type, setType] = useState("posts");
+	const [showGoToTop, setShowGoToTop] = useState(false);
 
 	useEffect(() => {
 		console.log("title change");
@@ -28,6 +30,25 @@ export default function Content() {
 				setPosts(posts);
 			});
 	}, [type]);
+
+	useEffect(() => {
+		const scrollHandler = () => {
+			if (window.scrollY >= 200) {
+				setShowGoToTop(true);
+			} else {
+				setShowGoToTop(false);
+			}
+
+			// setShowGoToTop(window.scrollY >= 20 0);
+		};
+
+		window.addEventListener("scroll", scrollHandler);
+
+		// cleanup function, don dep bo nho khi component unmounted
+		return () => {
+			window.removeEventListener("scroll", scrollHandler);
+		};
+	}, []);
 
 	return (
 		<div>
@@ -58,6 +79,17 @@ export default function Content() {
 					<li key={post.id}>{post.title || post.name}</li>
 				))}
 			</ul>
+			{showGoToTop && (
+				<button
+					style={{
+						position: "fixed",
+						bottom: 20,
+						right: 20,
+					}}
+				>
+					Go to top
+				</button>
+			)}
 		</div>
 	);
 }
