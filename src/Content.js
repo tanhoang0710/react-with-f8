@@ -19,18 +19,24 @@ export default function Content() {
 
 	// Note: Khi thay component co the bi unmounted bang bat ki truong hop nao, ma o trong component do co sd setInterval, setTimeout, async, listener event, subcribe event thi luon nho dung clean up function de tranh ro ri bo nho
 
-	const [count, setCount] = useState(1);
+	const [avatar, setAvatar] = useState();
 
 	useEffect(() => {
-		console.log("Mounted or Re-render");
+		return () => {
+			avatar && URL.revokeObjectURL(avatar.preview);
+		};
+	}, [avatar]);
 
-		return () => console.log("Clean up");
-	}, [count]);
+	const previewAvatarHandler = (e) => {
+		const file = e.target.files[0];
+		file.preview = URL.createObjectURL(file);
+		setAvatar(file);
+	};
 
 	return (
 		<div>
-			<h1>{count}</h1>
-			<button onClick={() => setCount(count + 1)}>Click me</button>
+			<input type="file" onChange={previewAvatarHandler} />
+			{avatar && <img src={avatar.preview} alt="" width="80%" />}
 		</div>
 	);
 }
