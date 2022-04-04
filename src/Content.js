@@ -1,33 +1,45 @@
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
-// useEffect
-// 1. Cap nhat lai state
-// 2. Cap nhat DOM (mutated)
-// 3. Render lai UI
-// 4. Goi cleanup neu deps thay doi
-// 5. Goi useEffect callback
+// Luu cac gia tri qua 1 tham chieu ben ngoai
+// function component
 
-// useLayoutEffect
-// 1. Cap nhat lai state
-// 2. Cap nhat DOM (mutated)
-// 3. Goi cleanup neu deps thay doi (sync)
-// 4. Goi useLayoutEffect callback(sync)
-// 5. Render lai UI
 export default function Content() {
-	const [count, setCount] = useState(0);
+	const [count, setCount] = useState(60);
 
-	useLayoutEffect(() => {
-		if (count > 3) setCount(0);
+	const timerId = useRef();
+	const prevCount = useRef();
+	const h1Ref = useRef();
+
+	useEffect(() => {
+		prevCount.current = count;
 	}, [count]);
 
-	const handleRun = () => {
-		setCount(count + 1);
+	useEffect(() => {
+		const rect = h1Ref.current.getBoundingClientRect();
+		console.log(rect);
+	}, []);
+
+	const handleStart = () => {
+		timerId.current = setInterval(() => {
+			setCount((prev) => prev - 1);
+		}, 1000);
+
+		console.log("Start -> ", timerId.current);
 	};
+
+	const handleStop = () => {
+		clearInterval(timerId.current);
+
+		console.log("Stop -> ", timerId.current);
+	};
+
+	console.log(count, prevCount.current);
 
 	return (
 		<div>
-			<h1>{count}</h1>
-			<button onClick={handleRun}>Run</button>
+			<h1 ref={h1Ref}>{count}</h1>
+			<button onClick={handleStart}>Start</button>
+			<button onClick={handleStop}>Stop</button>
 		</div>
 	);
 }
