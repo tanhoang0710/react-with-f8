@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import Content from "./Content";
 // import Content from "./Content";
 
@@ -9,18 +9,19 @@ import Content from "./Content";
 // HOC
 // Render props
 
+// Can dung memo thi moi dung useCallback
+
 function App() {
 	const [count, setCount] = useState(0);
 
-	const increase = () => {
-		setCount(count + 1);
-	};
+	const increase = useCallback(() => {
+		setCount((prev) => prev + 1);
+	}, []);
 
 	return (
 		<div style={{ padding: "10px 32px" }}>
-			<Content />
+			<Content onIncrease={increase} />
 			<h1>{count}</h1>
-			<button onClick={increase}>Click me!</button>
 		</div>
 	);
 }
