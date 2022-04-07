@@ -1,7 +1,5 @@
-import Content from "./Content";
 import "./App.css";
-import { useContext } from "react";
-import { ThemeContext } from "./ThemeContext";
+import { useStore, actions } from "./store";
 
 // Context
 // CompA => CompB => CompC
@@ -11,12 +9,27 @@ import { ThemeContext } from "./ThemeContext";
 // 3. Consumer
 
 export default function App() {
-	const context = useContext(ThemeContext);
+	const [state, dispatch] = useStore();
+	const { todos, todoInput } = state;
+
+	const handleAdd = () => {
+		dispatch(actions.add_todo(todoInput));
+	};
 
 	return (
-		<div style={{ padding: 20 }}>
-			<button onClick={context.toggleThemeHandler}>Toggle theme</button>
-			<Content />
+		<div>
+			<input
+				type="text"
+				value={todoInput}
+				placeholder="Enter todo"
+				onChange={(e) => {
+					dispatch(actions.setTodoInput(e.target.value));
+				}}
+			/>
+			<button onClick={handleAdd}>Add</button>
+			{todos.map((todo, index) => (
+				<li key={index}>{todo}</li>
+			))}
 		</div>
 	);
 }
