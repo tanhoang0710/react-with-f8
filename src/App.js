@@ -1,35 +1,26 @@
-import "./App.css";
-import { useStore, actions } from "./store";
-
-// Context
-// CompA => CompB => CompC
-
-// 1. Create context
-// 2. Provider
-// 3. Consumer
+import React, { useEffect, useRef } from "react";
+import Video from "./Video";
 
 export default function App() {
-	const [state, dispatch] = useStore();
-	const { todos, todoInput } = state;
+	const videoRef = useRef();
 
-	const handleAdd = () => {
-		dispatch(actions.add_todo(todoInput));
+	useEffect(() => {
+		console.log(videoRef.current);
+	});
+
+	const handlePlay = () => {
+		videoRef.current.play();
+	};
+
+	const handlePause = () => {
+		videoRef.current.pause();
 	};
 
 	return (
 		<div>
-			<input
-				type="text"
-				value={todoInput}
-				placeholder="Enter todo"
-				onChange={(e) => {
-					dispatch(actions.setTodoInput(e.target.value));
-				}}
-			/>
-			<button onClick={handleAdd}>Add</button>
-			{todos.map((todo, index) => (
-				<li key={index}>{todo}</li>
-			))}
+			<Video ref={videoRef} />
+			<button onClick={handlePlay}>Play</button>
+			<button onClick={handlePause}>Pause</button>
 		</div>
 	);
 }

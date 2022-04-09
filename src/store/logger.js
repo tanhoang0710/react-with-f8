@@ -1,5 +1,3 @@
-import { toHaveAccessibleDescription } from "@testing-library/jest-dom/dist/matchers";
-
 export default function logger(reducer) {
 	return (prevState, action) => {
 		console.group(action.type);
